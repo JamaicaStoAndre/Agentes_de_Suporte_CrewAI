@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrewAI Support</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">CrewAI Support Interface</h1>
+        <form id="support-form">
+            <div class="form-group">
+                <label for="customer">Customer</label>
+                <input type="text" class="form-control" id="customer" placeholder="Enter customer name" required>
+            </div>
+            <div class="form-group">
+                <label for="person">Person</label>
+                <input type="text" class="form-control" id="person" placeholder="Enter person name" required>
+            </div>
+            <div class="form-group">
+                <label for="inquiry">Inquiry</label>
+                <textarea class="form-control" id="inquiry" rows="3" placeholder="Enter the inquiry" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <hr>
+        <h2>Response</h2>
+        <div id="response" class="alert alert-info" role="alert" style="display: none;"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#support-form').on('submit', function(e){
+                e.preventDefault();
+                
+                const customer = $('#customer').val();
+                const person = $('#person').val();
+                const inquiry = $('#inquiry').val();
+
+                $.ajax({
+                    url: '/api/kickoff',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ customer, person, inquiry }),
+                    success: function(response) {
+                        $('#response').text(JSON.stringify(response, null, 2)).show();
+                    },
+                    error: function(error) {
+                        $('#response').text('An error occurred').show();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
